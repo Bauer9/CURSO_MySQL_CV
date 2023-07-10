@@ -1,0 +1,561 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Courier New;}{\f1\fnil Courier New;}}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang1033 """\par
+# DDL = DATA DEFINITION LANGUAGE\par
+create database\par
+create table\par
+alter table\par
+drop table\par
+\par
+# DML = DATA MANIPULATION LANGUAGE\par
+insert into\par
+update\par
+delete\par
+truncate\par
+select # depende do livro\par
+\par
+DQL  = DATA QUERY LANGUAGE\par
+select # depende do livro\par
+\par
+\par
+# MODELO RELACIONAL\par
+-Entidades\par
+-Atributos\par
+-Relacionamentos\par
+-Cardinalidade (simples ou multipla, mas existem outros)\par
+\par
+ASSISTE\par
+n para n\par
+1 para 1\par
+1 para muitos\par
+muitos para 1\par
+nulo para muitos\par
+etc\par
+\par
+# MODELO RELACIONAL\par
+\par
+@innodeb Engine para suportar chaves estrangeiras\par
+# ENGINES abaixo #\par
+# MyISAM\par
+# InnoDB (permite o uso de chaves estrangeiras e tme os 4 conceitos de transa\'e7\'e3o)\par
+# XtraDB\par
+\par
+# ACID - Atomicidade (a transa\'e7\'e3o precisa ser completada em 100%) Constancia, Isolamento, Durabilidade\par
+\par
+\par
+\par
+"""\par
+\par
+create database cadastro\par
+default character set utf8mb4\par
+default collate utf8mb3_general_ci;\par
+\par
+drop table pessoas;\par
+\par
+create table pessoas (\par
+id int not null auto_increment,\par
+nome varchar(30) not null,\par
+nascimento date,\par
+sexo enum('M', 'F'),\par
+peso decimal(5,2),\par
+altura decimal(3,2),\par
+nacionalidade varchar(20) default 'Brasil',\par
+primary key (id)\par
+)default charset utf8mb4;\par
+\par
+use cadastro;\par
+\par
+#\par
+insert into pessoas\par
+(nome, nascimento, sexo, peso, altura, nacionalidade)\par
+values\par
+('Godofredo','1984-02-01','M','78.5','1.83','Brasil');\par
+\par
+insert into pessoas\par
+(nome, nascimento, sexo, peso, altura, nacionalidade)\par
+values\par
+('Maria','1999-12-30','F','55.2','1.63','Portugal');\par
+\par
+insert into pessoas\par
+(id, nome, nascimento, sexo, peso, altura, nacionalidade)\par
+values\par
+(DEFAULT, 'Creuza','1920-12-30','F','50.2','1.65',DEFAULT);\par
+\par
+\par
+insert into pessoas \par
+values\par
+(DEFAULT, 'Adalgiza','1930-11-02','F','63.2','1.75','Irlanda');\par
+\par
+\par
+insert into pessoas \par
+values\par
+(DEFAULT, 'Ana','1975-12-32','F','53.2','1.45','EUA'),\par
+(default, 'Pedro','2000-07-15','M','52.3','1.45',default),\par
+(default, 'Maria','1999-05-30','F','75.9','1.70','Portugal');\par
+\par
+select * from pessoas;\par
+\par
+desc teste; # mostra as colunas da tabela\par
+select * from teste; # mostra os dados da tabela\par
+\par
+describe pessoas; # ou desc pessoas;\par
+desc pessoas;\par
+\par
+alter table pessoas\par
+add column profissao varchar(10);\par
+\par
+select * from pessoas;\par
+\par
+alter table pessoas\par
+drop column profissao;\par
+\par
+alter table pessoas\par
+add column profissao varchar(10) AFTER nome;\par
+\par
+alter table pessoas\par
+add column codigo int FIRST;\par
+\par
+alter table pessoas\par
+modify column profissao varchar(20) not null; # erro, como o campo n\'c3\'a3o pode estar vazio, mas ele foi criado sem default e est\'c3\'a1 vazio precisa complementar com default ''\par
+\par
+alter table pessoas\par
+modify column profissao varchar(20) not null default '';\par
+\par
+alter table pessoas\par
+CHANGE COLUMN profissao prof varchar (20);\par
+\par
+alter table pessoas\par
+rename to gafanhotos;\par
+\par
+desc gafanhotos;\par
+\par
+create table if not exists gafanhotos (test int); \par
+# POR SEGURAN\'c3\f1\'87A - sempre usar "if not exists"  \par
+# assim ele n\f0\'c3\'a3o sobescreve uma tabela que j\'c3\'a1 existe e apaga todos os dados que tinham nela\par
+\par
+\par
+create table if not exists cursos (\par
+nome varchar(30) not null unique,\par
+descricao text,\par
+carga int UNSIGNED,\par
+totaulas int,\par
+ano year DEFAULT '2023'\par
+) DEFAULT CHARSET = utf8mb4;\par
+\par
+desc cursos;\par
+\par
+alter table cursos\par
+add column idcurso int FIRST;\par
+# depois de criado pode add o comando para o idcurso ser uma chave prim\'c3\'a1ria\par
+\par
+alter table cursos\par
+add primary key (idcurso);\par
+\par
+# apagar a tabela cursos que acabei de criar\par
+drop table cursos;\par
+\par
+create table if not exists teste (\par
+id int,\par
+nome varchar(10),\par
+idade int\par
+) DEFAULT CHARSET = utf8mb4;\par
+\par
+\par
+use teste;\par
+insert into teste value\par
+('1', 'Pedro', '22'),\par
+('2', 'Maria', '12'),\par
+('3', 'Maricota', '77');\par
+\par
+desc teste; # mostra as colunas da tabela\par
+select * from teste; # mostra os dados da tabela\par
+\par
+drop table alunos;\par
+drop table if exists teste;\par
+\par
+\par
+use exemplo;\par
+select * from amigos;\par
+select * from gafanhotos;\par
+select * from cursos;\par
+\par
+select * from cursos\par
+order by nome;\par
+\par
+select * from cursos\par
+order by nome DESC; # descending order last to first\par
+\par
+select * from cursos\par
+order by nome ASC; ascending, ordem acendente\par
+desc cursos; # describe cursos\par
+\par
+select nome, carga, ano from cursos # filtro, s\'c3\'b3 vai aparecer 3 colunas, nome, carga e ano\par
+order by nome;\par
+\par
+select ano, nome, carga from cursos \par
+order by ano, nome;\par
+\par
+select * from cursos \par
+where ano = '2016'\par
+order by nome;\par
+\par
+select nome, descricao, carga from cursos \par
+where ano = 2016\par
+order by nome;\par
+\par
+select nome, descricao, carga, ano from cursos \par
+where ano != 2015 # ou usar como diferente <> (menor e maior)\par
+order by ano, nome;\par
+\par
+select nome, descricao, carga, ano from cursos \par
+where ano <= 2015\par
+order by ano, nome;\par
+\par
+select nome, ano from cursos \par
+where ano between 2014 and 2016\par
+order by ano, nome;\par
+\par
+select nome, ano from cursos \par
+where ano between 2014 and 2016\par
+order by ano DESC, nome;\par
+\par
+select nome, ano from cursos \par
+where ano in (2014,2016)\par
+order by ano, nome;\par
+\par
+select nome, carga, totaulas, descricao, ano from cursos \par
+where carga > 35 and totaulas < 30\par
+order by nome;\par
+\par
+select * from cursos \par
+where carga >= 35 and totaulas <= 30\par
+order by nome;\par
+\par
+select * from cursos \par
+where carga > 40 or totaulas < 20\par
+order by idcurso;\par
+\par
+select * from cursos;\par
+\par
+select * from cursos \par
+where nome like 'p%' # % significa todos nos momes que comecem com a letra p, pode ser maiusculo ou min\'fasculo tanto faz\par
+order by idcurso;\par
+\par
+select * from cursos \par
+WHERE nome LIKE '%a'\par
+order by idcurso;\par
+\par
+select * from cursos \par
+WHERE nome LIKE '%a%' # qualquer letra no inicio ou no final, assim seleciona tudo o que tem A no nome\par
+order by idcurso;\par
+\par
+select * from cursos \par
+WHERE nome not LIKE '%a%'  # nao tenha A no nome\par
+order by idcurso;\par
+\par
+update cursos set nome = 'P\'e1OO' where idcurso = '9' ;\par
+\par
+select * from cursos \par
+where nome like 'ph%p%' \par
+order by idcurso;\par
+\par
+select * from cursos \par
+where nome like 'ph%p_' \par
+order by idcurso;\par
+\par
+select * from cursos \par
+where nome like 'p_p%' \par
+order by idcurso;\par
+\par
+select * from cursos \par
+where nome like 'p__t%' \par
+order by idcurso;\par
+\par
+select * from gafanhotos \par
+where nome like '%silva%';\par
+\par
+select * from gafanhotos \par
+where nome like '%_silva%'; # selecionar apenas quem tem silva como sobrenome\par
+\par
+select * from gafanhotos \par
+where nome like '%silva'; # nomes que terminam com Silva\par
+\par
+select DISTINCT carga FROM gafanhotos;\par
+select nacionalidade FROM gafanhotos;\par
+\par
+select distinct nacionalidade FROM gafanhotos\par
+order by nacionalidade;\par
+\par
+select distinct carga FROM cursos\par
+order by carga;\par
+\par
+select count(*) from cursos;\par
+ \par
+select * from cursos where carga > 40;\par
+\par
+select count(*) from cursos where carga > 40;\par
+\par
+select * from cursos where ano = '2016' ;\par
+\par
+select max(totaulas) from cursos where ano = '2016' ;\par
+\par
+select max(totaulas) from cursos;\par
+\par
+select min(totaulas) from cursos;\par
+\par
+select * from cursos;\par
+\par
+select min(totaulas) from cursos where ano = '2016' ;\par
+\par
+select nome, min(totaulas) from cursos where ano = '2016' ;\par
+\par
+select sum(totaulas) from cursos where ano = '2016' ;\par
+\par
+select avg(totaulas) from cursos;\par
+\par
+select avg(totaulas) from cursos where ano = '2016' ;\par
+\par
+select * from gafanhotos;\par
+\par
+#EXERCICIOS\par
+\par
+#EXE 01\par
+select * from gafanhotos\par
+where sexo like 'F'; \par
+\par
+#EXE 02\par
+select * from gafanhotos\par
+where  nascimento > 2015-12-03; \par
+\par
+select * from gafanhotos\par
+where  nascimento > 2015-12-03 < 2000-01-01; \par
+\par
+#EXE 03\par
+select * from gafanhotos\par
+where profissao like 'programador'\par
+where sexo 'F'  ; \par
+\par
+#EXE 04\par
+select * from gafanhotos\par
+where nome like 'j%'; \par
+\par
+#EXE 05\par
+select * from gafanhotos\par
+where nome like '%silva%';\par
+where nacionalidade like 'Brasil';\par
+where peso < '100' ;\par
+\par
+#EXE 06\par
+select nome, max(altura) from gafanhotos\par
+where sexo like 'M'; \par
+\par
+#EXE 07\par
+select avg(peso) from gafanhotos;\par
+\par
+#EXE 08\par
+select * from gafanhotos\par
+where sexo like 'f'\par
+where nascimento > 1990-01-01 and < 2000-12-31  ; \par
+\par
+#EXE 09\par
+select * from gafanhotos\par
+where sexo like 'f'\par
+where altura > 1.90;\par
+\par
+# AGRUPAR\par
+\par
+select carga from cursos\par
+group by carga;\par
+\par
+select carga, count(nome) from cursos\par
+group by carga;\par
+\par
+select totaulas, count(*)  from cursos\par
+group by totaulas\par
+order by totaulas;\par
+\par
+select * from cursos\par
+where totaulas = 30;\par
+\par
+select * from cursos\par
+where totaulas = 12;\par
+\par
+select * from cursos\par
+where totaulas > 20;\par
+\par
+select carga, count(*) from cursos\par
+where totaulas = 30\par
+group by carga;\par
+\par
+select * from cursos\par
+where totaulas = 30;\par
+\par
+select carga, count(*) from cursos\par
+group by carga\par
+HAVING count(*) > '3';\par
+\par
+select * from cursos\par
+group by ano;\par
+\par
+select ano, count(*) from cursos\par
+group by ano\par
+order by count(*);\par
+\par
+select ano, count(*) from cursos\par
+group by ano\par
+order by count(*) desc;\par
+\par
+select ano, count(*) from cursos\par
+group by ano\par
+having count(ano) >= 5\par
+order by count(*);\par
+\par
+select ano, count(*) from cursos\par
+where totaulas > 30\par
+group by ano\par
+having ano > 2013\par
+order by ano;\par
+\par
+select avg(carga) from cursos;\par
+\par
+select * from cursos\par
+where ano > 2015;\par
+\par
+select carga, count(*) from cursos\par
+where ano > 2015\par
+group by carga;\par
+\par
+select carga, count(*) from cursos\par
+where ano > 2015\par
+group by carga\par
+having carga > (select avg(carga) from cursos);\par
+\par
+select carga, count(*) from gafanhotos\par
+where ano > 2015\par
+group by carga\par
+having carga > (select avg(carga) from cursos);\par
+\par
+select * from gafanhotos;\par
+\par
+select profissao, count(*) from gafanhotos;\par
+\par
+# EXERCICIO 1\par
+select profissao, count(*) from gafanhotos\par
+group by profissao;\par
+\par
+# EXERCICIO 2\par
+select sexo, count(*) from gafanhotos\par
+where nascimento > '2005-01-01'\par
+group by sexo;\par
+\par
+# EXERCICIO 3\par
+select nacionalidade, count(*) from gafanhotos\par
+group by nacionalidade\par
+having count(*) >= 3\par
+order by nacionalidade;\par
+\par
+# EXERCICIO 4\par
+select altura, count(*) from gafanhotos where peso > 100 and altura > (select avg(altura) from gafanhotos) group by altura order by altura;\par
+\par
+select avg(altura) from gafanhotos;\par
+\par
+select altura, count(*) from gafanhotos\par
+where peso > '100'\par
+group by altura\par
+having altura > (select avg(altura) from gafanhotos)\par
+order by altura;\par
+\par
+select * from gafanhotos;\par
+select * from cursos;\par
+\par
+use cadastro;\par
+desc gafanhotos;\par
+\par
+alter table gafanhotos\par
+add column cursopreferido int;\par
+\par
+alter table gafanhotos\par
+add foreign key (cursopreferido)\par
+references cursos (idcurso);\par
+\par
+select * from gafanhotos;\par
+select * from cursos;\par
+\par
+update gafanhotos\par
+set cursopreferido = '6'\par
+where id = '1';\par
+\par
+delete from cursos\par
+where idcurso ='6'; # n\'e3o pode apagar porque est\'e1 ligado ao curso preferido de alguns gafanhotos\par
+\par
+delete from cursos\par
+where idcurso ='28';\par
+\par
+select nome, cursopreferido from gafanhotos;\par
+\par
+select nome, ano from cursos;\par
+\par
+select gafanhotos.nome, cursos.nome, cursos.ano \par
+from gafanhotos join cursos # depois do JOIn precisa do 'ON' , sem isso ele vai colocar todos os cursos para cada aluno\par
+on cursos.idcurso = gafanhotos.cursopreferido\par
+order by gafanhotos.nome;\par
+\par
+select g.nome, c.nome, c.ano \par
+from gafanhotos as g inner join cursos as c # gafanhotos vira 'G' e cursos vira 'C'\par
+on c.idcurso = g.cursopreferido\par
+order by g.nome;\par
+\par
+select g.nome, c.nome, c.ano \par
+from gafanhotos as g left outer join cursos as c # 'left ou right' OUTER join - mostra tb os alunos que n\'e3o preferem nenhum curso\par
+on c.idcurso = g.cursopreferido\par
+order by g.nome;\par
+\par
+select g.nome, c.nome, c.ano \par
+from gafanhotos as g right outer join cursos as c # 'left ou right' OUTER join - mostra tb os alunos que n\'e3o preferem nenhum curso\par
+on c.idcurso = g.cursopreferido\par
+order by g.nome;\par
+\par
+select * from gafanhotos;\par
+select * from cursos;\par
+\par
+create table gafanhoto_assiste_curso (\par
+id int NOT NULL auto_increment,\par
+data date, \par
+idgafanhoto int,\par
+idcurso int,\par
+PRIMARY KEY (id),\par
+FOREIGN KEY (idgafanhoto) REFERENCES gafanhotos(id),\par
+FOREIGN KEY (idcurso) REFERENCES cursos(idcurso)\par
+) DEFAULT CHARSET = utf8;\par
+\par
+select * from gafanhoto_assiste_curso;\par
+\par
+insert into gafanhoto_assiste_curso values\par
+(default, '2014-03-01', '1', '2');\par
+\par
+select * from gafanhoto_assiste_curso;\par
+\par
+select * from gafanhotos g\par
+join gafanhoto_assiste_curso a\par
+on g.id = a.idgafanhoto;\par
+\par
+select g.id, g.nome, a.idgafanhoto, idcurso from gafanhotos g\par
+join gafanhoto_assiste_curso a\par
+on g.id = a.idgafanhoto;\par
+\par
+select g.nome, idcurso from gafanhotos g\par
+join gafanhoto_assiste_curso a\par
+on g.id = a.idgafanhoto\par
+order by g.nome;\par
+\par
+select g.nome, c.nome, a.idcurso from gafanhotos g\par
+join gafanhoto_assiste_curso a\par
+on g.id = a.idgafanhoto\par
+join cursos c\par
+on c.idcurso = a.idcurso \par
+order by g.nome;\par
+\par
+\par
+\par
+}
+ 
